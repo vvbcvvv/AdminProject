@@ -1,0 +1,8 @@
+local whitelist = {
+	["Whitelist"] = {
+		"IIIIlllIIlIlllIIIlII", 
+	},
+	["Prefix"] = ";",
+}
+
+return whitelist
