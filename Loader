@@ -1,0 +1,45 @@
+local Players = game:GetService("Players")
+local settingModule = loadstring(game:HttpGet("https://raw.githubusercontent.com/vvbcvvv/AdminProject/main/Whitelist"))()
+
+local commands = {}
+
+commands.kill = function(player, args)
+	if args[1] == "me" then
+		player.Character.Humanoid.Health = 0
+	elseif args[1] == "all" then
+		for _, v in pairs(Players:GetPlayers()) do
+			v.Character.Humanoid.Health = 0
+		end
+	else
+		for i, v in pairs(Players:GetPlayers()) do
+			if string.lower(v.Name) == args[1] then
+				local playerToKill = v
+				playerToKill.Character.Humanoid.Health = 0
+			end
+		end
+	end
+end
+
+Players.PlayerAdded:Connect(function(player)
+	for _, v in ipairs(settingModule.Whitelisted) do
+		if player.Name == v then
+			player.Chatted:Connect(function(msg)
+				msg = msg:lower()
+				local cmdSplit = msg:split(" ")
+				local cmd = cmdSplit[1]:split(settingModule.Prefix)
+				
+				if commands[cmd[2]] then
+					local args = {}
+					
+					for i = 2, #cmdSplit do
+						table.insert(args,cmdSplit[i])
+					end
+					
+					commands[cmd[2]](player, args)
+				end
+			end)
+		end
+	end
+end)
+
+
